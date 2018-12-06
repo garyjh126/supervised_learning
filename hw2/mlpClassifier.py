@@ -40,8 +40,8 @@ from sklearn.linear_model import Ridge
 import pandas as pd
 import plotting_curves as pc
 
-test_size = 40000
-train_data_scope = 100000
+test_size = 400
+train_data_scope = 100
 test_data_scope = 10000
 
 
@@ -68,7 +68,7 @@ def getXy(plotgraphs = False, plot_samples = 0):
     df = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'])
     features = ['1','2','3','4','5','6','7','8']
     
-    dftoplot = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'], nrows=plot_samples)
+    #dftoplot = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'], nrows=plot_samples)
     
     
     if plotgraphs == True:
@@ -84,18 +84,10 @@ def getXy(plotgraphs = False, plot_samples = 0):
 
 ### ML tutorial 
 
-# # Load dataset
-# data = load_breast_cancer()
-
-# # Organize data for testing with breast cancer dataset
-# label_names = data['target_names']
-# labels = data['target']
-# feature_names = data['feature_names']
-# features = data['data']
 
 
 # Loading in our own data
-X, y = getXy(plotgraphs = True, plot_samples=200)
+X, y = getXy(plotgraphs = False, plot_samples=200)
 
 # Split our data
 X, test_X, y, test_y = train_test_split(X, y, test_size=0.33, random_state=42)
@@ -108,38 +100,15 @@ X, test_X, y, test_y = train_test_split(X, y, test_size=0.33, random_state=42)
 # deviations to a standard Gaussian distribution with a mean of 0 and a standard deviation of 1.
 
 scaler = StandardScaler().fit(X)
-#rescaledX = scaler.transform(X)
+#X = scaler.transform(X)
 # summarize transformed data
 np.set_printoptions(precision=3)
 
 
 
-## Naive Bayes (NB)
-
-# Initialize our classifier
-gnb = GaussianNB()
-
-
-# Train our classifier
-model = gnb.fit(X, y)
-
-# Make predictions
-preds = gnb.predict(test_X)
-
-
-# Evaluate accuracy
-print("Using naive bayes\nAccuracy: " , accuracy_score(test_y, preds)) # As you see in the output, the NB classifier is 94.15% accurate on the breast cancer dataset. 
-                                          # These results suggest that our feature set of 30 attributes are good indicators of tumor class. 
-
-# When running the model on the breast cancer dataset, we get a 52% accuracy. 
-# Diagnosing bias vs variance (Underfitting or Overfitting).
-# The bias of an estimator is its average error for different training sets. The variance of an estimator indicates how sensitive it 
-# is to varying training sets. Noise is a property of the data.
-
-
 def print_test():
     print(preds, test_y)
-    print(len(preds) - 32500, len(test_y) - 32500)
+    print(len(preds) - 32800, len(test_y) - 32800)
     count_correct = 0
     for i in range(len(preds) - 32800):
         print("{}: {},{}".format(i, preds[i], test_y[i]))  
@@ -147,8 +116,8 @@ def print_test():
             count_correct+=1
     print(count_correct)
 
-
-
+def output_preds_to_test_labels():
+    pass
 
 ## MLP Classifier
 
@@ -163,6 +132,7 @@ model = mlp.fit(X, y)
 preds = mlp.predict(test_X)
 
 # Evaluate accuracy
-print("Using MLPClassifier\nAccuracy: " , accuracy_score(test_y, preds))
+print("Using MLPClassifier\nAccuracy: {}".format(accuracy_score(test_y, preds)))
 
+print_test()
 
