@@ -26,18 +26,18 @@ df = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'])
 
 
 features = ['1','2','3','4','5','6','7','8']
+scaler = StandardScaler() 
 
 X = df.loc[:train_data_scope-1, features].values
 y = df.loc[:train_data_scope-1,['target']].values
 X = np.reshape(X, (train_data_scope, 8))
 y = np.reshape(y, train_data_scope)
-X = tf.keras.utils.normalize(X, axis = 1)
-scaler = StandardScaler()   
-X = scaler.fit_transform(X)
 
+X = tf.keras.utils.normalize(X, axis = 1)
+
+X = scaler.fit_transform(X)
 y = tf.keras.utils.to_categorical(df['target'])
 
-print(y)
     #1
 #create model
 model = tf.keras.models.Sequential()

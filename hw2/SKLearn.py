@@ -8,7 +8,7 @@ from sklearn import svm
 import numpy as np
 from sklearn import model_selection
 from sklearn.model_selection import train_test_split
-
+import plotting_curves as pc
 test_size = 4000
 data_scope = 10000
 
@@ -85,4 +85,8 @@ myfile.close()
 
     #print('Prediction: ', clf.predict(test_X[-1].reshape(1,-1)))
 
+
+# plots = pc.Plots()
+# cv = plots.validation_curve(clf, X, y, "gamma")
+# vc = plots.learning_curve(clf, X, y)
 
