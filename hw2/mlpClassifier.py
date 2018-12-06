@@ -40,8 +40,8 @@ from sklearn.linear_model import Ridge
 import pandas as pd
 import plotting_curves as pc
 
-test_size = 400
-train_data_scope = 100
+
+train_data_scope = 100000
 test_data_scope = 10000
 
 
@@ -68,11 +68,11 @@ def getXy(plotgraphs = False, plot_samples = 0):
     df = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'])
     features = ['1','2','3','4','5','6','7','8']
     
-    #dftoplot = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'], nrows=plot_samples)
+    dftoplot = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8','target'], nrows=plot_samples)
     
     
     if plotgraphs == True:
-        plt.scatter(dftoplot[['4']],dftoplot[['7']],marker='+',color='red')
+        plt.scatter(dftoplot[['4']],dftoplot[['7']],marker='+',color='red') # Features were drawn from features set for correlation study
         plt.plot()
         plt.show()
 
@@ -82,15 +82,25 @@ def getXy(plotgraphs = False, plot_samples = 0):
     y = np.reshape(y, train_data_scope)
     return X, y
 
-### ML tutorial 
 
 
 
 # Loading in our own data
 X, y = getXy(plotgraphs = False, plot_samples=200)
 
-# Split our data
-X, test_X, y, test_y = train_test_split(X, y, test_size=0.33, random_state=42)
+# Split our data BEFORE predicting test set
+X, test_X, y, test_y = train_test_split(X, y, test_size=0.02, random_state=42)
+
+# our data AFTER predicting test set
+
+testset_filename = "./test/test.csv"
+df_test = pd.read_csv(testset_filename, names=['1','2','3','4','5','6','7','8'])
+features = ['1','2','3','4','5','6','7','8']
+
+real_test_X = df_test.loc[:test_data_scope-1, features].values
+real_test_X = np.reshape(real_test_X, (test_data_scope, 8))
+print(len(real_test_X))
+
 
 # FEATURE SCALING 
 
@@ -116,8 +126,15 @@ def print_test():
             count_correct+=1
     print(count_correct)
 
-def output_preds_to_test_labels():
-    pass
+def output_preds_to_test_labels(real_predictions):
+    filename = "./test-labels.txt"
+    myfile = open(filename, 'w')
+    for line in range(len(real_predictions)):
+        #print('Prediction: ', test_X[line_no], clf.predict(test_X[line_no].reshape(1,-1)))
+        myfile.write("{}\n".format(real_predictions[line]))
+
+    myfile.close()
+
 
 ## MLP Classifier
 
@@ -129,10 +146,12 @@ mlp = MLPClassifier(alpha=1)
 model = mlp.fit(X, y)
 
 # Make predictions
-preds = mlp.predict(test_X)
+preds = mlp.predict(test_X) # This uses the test data that was split from training. NOT ACTUAL TEST DATA.
 
 # Evaluate accuracy
 print("Using MLPClassifier\nAccuracy: {}".format(accuracy_score(test_y, preds)))
 
-print_test()
+real_predictions = mlp.predict(real_test_X)
+
+output_preds_to_test_labels(real_predictions)
 
