@@ -53,40 +53,40 @@ testdata_scope = 10000-test_size
 
 # Loading the test data 
 
-filename = "./test/test.csv"
-test_df = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8'])
-test_features = ['1','2','3','4','5','6','7','8']
+# filename = "./test/test.csv"
+# test_df = pd.read_csv(filename, names=['1','2','3','4','5','6','7','8'])
+# test_features = ['1','2','3','4','5','6','7','8']
 
-# Separating out the features
-test_X = test_df.loc[:testdata_scope, test_features].values
-
-
-# Standardizing the features
-# test_X = StandardScaler().fit_transform(test_X)
-# Standardize_DF = pd.DataFrame(test_X)
-
-test_X = np.reshape(test_X, (testdata_scope+1, 8))
-y = np.reshape(y, testdata_scope+1)
+# # Separating out the features
+# test_X = test_df.loc[:testdata_scope, test_features].values
 
 
+# # Standardizing the features
+# # test_X = StandardScaler().fit_transform(test_X)
+# # Standardize_DF = pd.DataFrame(test_X)
 
-# Scikit Learn Machine Learning SVM
-clf = svm.SVC(kernel = 'linear',  C=1.0)
-clf.fit(test_X, y)
-print("Accuracy: ", clf.score(test_X, y))
-
-myfile = open('xyz.txt', 'w')
-for line_no in range(len(test_X)):
-    #print('Prediction: ', test_X[line_no], clf.predict(test_X[line_no].reshape(1,-1)))
-    myfile.write("{} .. Prediction: {}\n".format(test_X[line_no], clf.predict(test_X[line_no].reshape(1,-1))))
-
-myfile.close()
+# test_X = np.reshape(test_X, (testdata_scope+1, 8))
+# y = np.reshape(y, testdata_scope+1)
 
 
-    #print('Prediction: ', clf.predict(test_X[-1].reshape(1,-1)))
+
+# # Scikit Learn Machine Learning SVM
+# clf = svm.SVC(kernel = 'linear',  C=1.0)
+# clf.fit(test_X, y)
+# print("Accuracy: ", clf.score(test_X, y))
+
+# myfile = open('xyz.txt', 'w')
+# for line_no in range(len(test_X)):
+#     #print('Prediction: ', test_X[line_no], clf.predict(test_X[line_no].reshape(1,-1)))
+#     myfile.write("{} .. Prediction: {}\n".format(test_X[line_no], clf.predict(test_X[line_no].reshape(1,-1))))
+
+# myfile.close()
 
 
-# plots = pc.Plots()
-# cv = plots.validation_curve(clf, X, y, "gamma")
-# vc = plots.learning_curve(clf, X, y)
+#     #print('Prediction: ', clf.predict(test_X[-1].reshape(1,-1)))
+
+
+# # plots = pc.Plots()
+# # cv = plots.validation_curve(clf, X, y, "gamma")
+# # vc = plots.learning_curve(clf, X, y)
 
